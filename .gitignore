@@ -1,0 +1,43 @@
+# Python-related
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Virtual environment
+env/
+venv/
+ENV/
+
+# Environment variables
+.env
+.env.local
+
+# IDE-related
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# OS-related
+.DS_Store
+Thumbs.db
+
+# Project-specific
+data/
+*.db
+*.sqlite3
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Firebase
+firebase-debug.log

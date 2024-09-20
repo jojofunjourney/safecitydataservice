@@ -1,0 +1,4 @@
+requests==2.26.0
+google-cloud-firestore==2.3.4
+python-dotenv==1.0.0
+google-cloud-bigtable==2.14.0
