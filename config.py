@@ -7,4 +7,4 @@ load_dotenv()
 # Access environment variables
 SOCRATA_APP_TOKEN = os.getenv('SOCRATA_APP_TOKEN')
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-# Add other environment variables as needed
+GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
