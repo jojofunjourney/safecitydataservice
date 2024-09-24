@@ -1,6 +1,7 @@
 from typing import List, Dict, Type
 from models.crime_data_models import UnifiedCrimeData, NewYorkCrimeData, LosAngelesCrimeData, SeattleCrimeData, ChicagoCrimeData, CITY_DATA_MODELS, CITIES
-from collections import defaultdict
+from util.logger import logger
+
 city_dataclass_map: Dict[CITIES, Type[CITY_DATA_MODELS]] = {
     CITIES.NEW_YORK: NewYorkCrimeData,
     CITIES.LOS_ANGELES: LosAngelesCrimeData,
@@ -16,8 +17,7 @@ def transform_crime_data(city: CITIES, data: List[CITY_DATA_MODELS]) -> List[Uni
             city_dataclass(**record).transform() for record in data
         ]
         
-        print(f"Transformed {len(transformed_data)} rows for {city}")
-        print(f"First 5 items in transformed data: {transformed_data[:5]}")
+        logger.info(f"Transformed {len(transformed_data)} rows for {city}")
         
         return transformed_data
     except Exception as e:

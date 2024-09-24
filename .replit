@@ -1,0 +1,25 @@
+# Specify Python as the language
+language = "python3"
+run = "pip install -r requirements.txt && python main.py"
+modules = ["python-3.11"]
+
+# Package management related configuration
+[packager]
+# Enable features for automatic package management
+features.guessImports = true
+features.packageSearch = true
+features.enabledForHosting = false
+afterInstall = "echo 'Package installed successfully'"
+
+# Define paths and packages that should be ignored by the package manager
+ignoredPaths = [".git", "node_modules"]
+ignoredPackages = ["twitter", "discord"]
+
+# Additional deployment settings
+[deployment]
+# Ensure pip installs dependencies before starting the application
+run = [
+  "sh",
+  "-c",
+  "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000",
+]
