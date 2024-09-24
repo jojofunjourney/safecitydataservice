@@ -47,3 +47,4 @@ htmlcov/
 .coverage.*
 
 *.openapi.json
+safe-city-walk-*.json
