@@ -1,97 +1,113 @@
-### Folder and File Descriptions
-```
-project_root/
+# Safe City Walk
+
+Safe City Walk is a FastAPI-based web application that analyzes and visualizes crime data for various cities.
+
+## Project Structure
+
+safe-city-walk/
 ├── api/
 │ ├── controllers/
-│ │ └── load_crime_data_controller.py
+│ │ ├── crime_data_analysis_controller.py
+│ │ └── upload_crime_data_controller.py
 │ └── routes/
-│ └── load_crime_data_route.py
+│ ├── crime_data_analysis_route.py
+│ └── upload_crime_data_route.py
 ├── services/
-│ └── load_crime_data_service.py
+│ ├── crime_data_analysis_service.py
+│ └── upload_crime_data_service.py
 ├── util/
 │ ├── fetch_crime_data.py
+│ ├── gcs_util.py
+│ ├── logger.py
+│ ├── log.py
 │ └── transform_crime_data.py
 ├── models/
 │ └── crime_data_models.py
 ├── config.py
 ├── constants.py
-└── main.py
-```
+├── main.py
+├── requirements.txt
+└── .gitignore
 
+## Key Components
 
-#### api/
-Contains the API-related code, including controllers and routes.
+1. **API Controllers**: Handle incoming HTTP requests and responses.
+   - `crime_data_analysis_controller.py`: Manages crime data analysis requests.
+   - `upload_crime_data_controller.py`: Handles crime data upload requests.
 
-- **controllers/**: Handles the logic for API endpoints.
-  - `load_crime_data_controller.py`: Defines the endpoint for loading crime data.
+2. **Services**: Contain the core business logic.
+   - `crime_data_analysis_service.py`: Analyzes crime data using BigQuery.
+   - `upload_crime_data_service.py`: Manages the upload of crime data to Google Cloud Storage.
 
-- **routes/**: Manages the routing for the API.
-  - `load_crime_data_route.py`: Sets up the router for the load crime data endpoint.
+3. **Utilities**: Provide helper functions and modules.
+   - `fetch_crime_data.py`: Fetches crime data from various city APIs.
+   - `gcs_util.py`: Utilities for interacting with Google Cloud Storage.
+   - `logger.py` and `log.py`: Logging utilities.
+   - `transform_crime_data.py`: Transforms raw crime data into a unified format.
 
-#### services/
-Contains the business logic of the application.
+4. **Models**: Define data structures and types.
+   - `crime_data_models.py`: Contains Pydantic models for crime data.
 
-- `load_crime_data_service.py`: Orchestrates the process of fetching, transforming, and loading crime data to GCS.
+5. **Configuration**: 
+   - `config.py`: Contains configuration variables.
+   - `constants.py`: Defines constant values used across the project.
 
-#### util/
-Contains utility functions used across the application.
+6. **Main Application**: 
+   - `main.py`: The entry point of the FastAPI application.
 
-- `fetch_crime_data.py`: Handles fetching raw crime data from various city APIs.
-- `transform_crime_data.py`: Transforms the raw crime data into a unified format.
+## Setup and Installation
 
-#### models/
-Contains data models used in the application.
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/safe-city-walk.git
+   cd safe-city-walk
+   ```
 
-- `crime_data_models.py`: Defines the data structures for crime data.
-
-#### Root Directory Files
-
-- `config.py`: Contains configuration settings for the application.
-- `constants.py`: Stores constant values used throughout the application.
-- `main.py`: The entry point of the application, sets up the FastAPI app.
-
-## How It Works
-
-1. The API is initialized in `main.py`.
-2. When a request is made to load crime data, it's routed through `api/routes/load_crime_data_route.py`.
-3. The request is then handled by `api/controllers/load_crime_data_controller.py`.
-4. The controller calls `services/load_crime_data_service.py` to process the request.
-5. The service uses utility functions from `util/` to fetch and transform the data.
-6. Finally, the transformed data is loaded into Google Cloud Storage.
-
-## Setup
-
-1. Install the required packages:
+2. Install the required dependencies:
    ```
    pip install -r requirements.txt
    ```
 
-2. Create a `.env` file in the project root and add your environment variables:
+3. Set up your environment variables (refer to `config.py` for required variables).
+
+4. Run the application:
    ```
-   SOCRATA_APP_TOKEN=your_socrata_app_token_here
-   GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/google-credentials.json
+   uvicorn main:app --reload
    ```
 
-3. Obtain a Google Cloud service account key:
-   - Go to the Google Cloud Console (https://console.cloud.google.com/)
-   - Create a new project or select an existing one
-   - Enable the Firestore API for your project
-   - Go to "IAM & Admin" > "Service Accounts"
-   - Create a new service account or select an existing one
-   - Generate a new JSON key and download it
-   - Place the JSON key file in a secure location on your machine
-   - Update the GOOGLE_APPLICATION_CREDENTIALS path in your .env file to point to this JSON key file
+## API Endpoints
 
-## Running the Application
+- GET `/crime-data-analysis`: Analyze crime data for a specific city and time range.
+  - Query parameters: 
+    - `city`: City to analyze (e.g., NEW_YORK, LOS_ANGELES)
+    - `time_range`: Time range for analysis (e.g., 6months, 1year)
 
-To run the FastAPI application:
-python main.py
-This will start the server on `http://0.0.0.0:8000`. You can access the API documentation at `http://0.0.0.0:8000/docs`.
+- GET `/crime-data-analysis/coordinate`: Get coordinate-based crime data for a specific city and time range.
+  - Query parameters: 
+    - `city`: City to analyze
+    - `time_range`: Time range for analysis
 
-## API Documentation
+- POST `/upload-crime-data`: Upload crime data for a specific city and time range.
+  - Request body:
+    ```json
+    {
+      "city": "NEW_YORK",
+      "time_range": "6months"
+    }
+    ```
 
-The API provides the following endpoint:
+## How It Works
 
-- POST `/api/v1/load_crime_data`: Load crime data for a specific city and date range into Google Cloud Storage.
+1. The API is initialized in `main.py`.
+2. Requests are routed through the appropriate controllers in `api/controllers/`.
+3. Controllers call services to process the requests.
+4. Services use utility functions from `util/` to fetch, transform, and analyze data.
+5. Data is stored in and retrieved from Google Cloud Storage and BigQuery.
 
-For detailed API documentation, please refer to the Swagger UI available at `http://0.0.0.0:8000/docs` when the server is running.
+## Contributing
+
+Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.
