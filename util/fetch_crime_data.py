@@ -1,8 +1,8 @@
 import requests
-from typing import List, Dict, Any
+from typing import List
 from config import SOCRATA_APP_TOKEN
 from models.crime_data_models import UnifiedCrimeData
-from constants import CITY_DATASETS, DATA_LIMIT
+from constants import CITY_DATASETS
 from datetime import datetime, timedelta
 
 def fetch_city_data(city: str, time_range: str) -> List[UnifiedCrimeData]:

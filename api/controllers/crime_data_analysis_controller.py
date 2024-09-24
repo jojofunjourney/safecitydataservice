@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
-from typing import List
 from services.crime_data_analysis_service import analyze_crime_data, analyze_coordinate_crime_data
 from models.crime_data_models import CITIES, TIME_RANGES
 from util.logger import logger

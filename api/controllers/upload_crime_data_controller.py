@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Literal, Type
 from services.upload_crime_data_service import upload_crime_data_to_gcs
 from services.upload_coordinate_crime_data_service import upload_coordinate_crime_data_to_gcs
 from config import GCS_BUCKET_NAME
