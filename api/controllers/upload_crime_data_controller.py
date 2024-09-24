@@ -17,7 +17,7 @@ class UpLoadCrimeDataRequest(BaseModel):
 class UpLoadCrimeDataResponse(BaseModel):
     message: str
 
-@router.post("/upload_crime_data", response_model=UpLoadCrimeDataResponse)
+@router.post("/", response_model=UpLoadCrimeDataResponse)
 async def upload_crime_data(request: UpLoadCrimeDataRequest) -> UpLoadCrimeDataResponse:
     try:
         city = request.city.value

@@ -3,4 +3,4 @@ from api.controllers.crime_data_analysis_controller import router as crime_data_
 
 router = APIRouter()
 
-router.include_router(crime_data_analysis_router, prefix="/api/v1")
+router.include_router(crime_data_analysis_router, prefix="/api/v1/crime-data-analysis")
