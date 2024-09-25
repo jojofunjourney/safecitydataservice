@@ -1,14 +1,14 @@
 # from pyspark.sql import SparkSession, DataFrame, Row
 # from pyspark.sql.functions import count, col, round
 # from pyspark.storagelevel import StorageLevel
-from config import GOOGLE_APPLICATION_CREDENTIALS_JSON
+from config import GOOGLE_APPLICATION_CREDENTIALS
 from typing import Any, Callable
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
 def create_bigquery_client():
-    credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS_JSON)
+    credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
     client = bigquery.Client(credentials=credentials, project=credentials.project_id)
     return client
 
@@ -88,7 +88,7 @@ def create_spark_session():
             .appName("CrimeDataAnalysis") \
             .config("spark.jars", "https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-hadoop3-latest.jar") \
             .config("google.cloud.auth.service.account.enable", "true") \
-            .config("google.cloud.auth.service.account.json.keyfile", GOOGLE_APPLICATION_CREDENTIALS_JSON) \
+            .config("google.cloud.auth.service.account.json.keyfile", GOOGLE_APPLICATION_CREDENTIALS) \
             .config("spark.hadoop.fs.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem") \
             .config("spark.executor.memory", "4g") \
             .config("spark.executor.cores", "4") \
@@ -105,7 +105,7 @@ def create_spark_session():
       # hadoop_conf.set("fs.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem")
       # hadoop_conf.set("fs.AbstractFileSystem.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS")
       # hadoop_conf.set("google.cloud.auth.service.account.enable", "true")
-      # hadoop_conf.set("google.cloud.auth.service.account.json.keyfile", GOOGLE_APPLICATION_CREDENTIALS_JSON)
+      # hadoop_conf.set("google.cloud.auth.service.account.json.keyfile", GOOGLE_APPLICATION_CREDENTIALS)
       
       return spark
 
