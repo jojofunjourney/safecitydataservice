@@ -1,15 +1,19 @@
 # from pyspark.sql import SparkSession, DataFrame, Row
 # from pyspark.sql.functions import count, col, round
 # from pyspark.storagelevel import StorageLevel
-from config import GOOGLE_APPLICATION_CREDENTIALS
+from config import config 
 from typing import Any, Callable
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
 def create_bigquery_client():
-    credentials = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
-    client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+    env = config.ENVIRONMENT
+    if env == 'prod':
+        client = bigquery.Client()
+    else:
+        credentials = service_account.Credentials.from_service_account_file(config.GOOGLE_CREDENTIALS_FILE)
+        client = bigquery.Client(credentials=credentials, project=credentials.project_id)
     return client
 
 def read_data_from_bigquery(query: str, process_data: Callable[[bigquery.table.RowIterator], Any]) -> Any:

@@ -1,0 +1,57 @@
+# Python cache files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Development and IDE files
+.git
+.gitignore
+.vscode/
+.idea/
+
+# Environment variables (for security reasons)
+.env*
+
+# Logs
+*.log
+
+# Test files
+test/
+tests/
+
+# Documentation
+README.md
+docs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Google Cloud credentials (should be mounted at runtime)
+safe-city-walk-0188a532813e.json
+
+# OpenAPI specification (not needed in the container)
+safecitywalkdataservice.openapi.json
+
+# Replit configuration (not needed in the container)
+.replit
+replit.nix
+
+# Any other files or directories not needed in the container
+
+# Poetry virtual environment
+.venv/
+
+# Local environment variables
+.env.local
+
+# Ignore Jupyter Notebook files
+*.ipynb
+.ipynb_checkpoints/

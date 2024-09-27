@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  safecitydataservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-stage}
+    env_file:
+      - .env.${ENVIRONMENT:-stage}
+    volumes:
+      - ./safe-city-walk-0188a532813e.json:/app/google-credentials.json:ro
+
+volumes:
+  google-credentials:
