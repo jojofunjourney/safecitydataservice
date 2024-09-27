@@ -1,4 +1,5 @@
 import os
+import yaml
 from dotenv import load_dotenv
 from util.logger import logger
 
@@ -11,36 +12,29 @@ class Config:
         self.load_variables()
         self.validate_config()
         self.log_config()
-
-    def load_environment(self):
-        # Determine which .env file to load based on an environment variable
-        env_file = f'.env.{ENVIRONMENT}'
         
-        if os.path.exists(env_file):
-            load_dotenv(env_file)
-            logger.info(f"Configuration loaded from {env_file}")
-        else:
-            logger.warning(f"{env_file} not found, using environment variables")
+    def load_yaml(self):
+        with open('env.yaml', 'r') as file:
+            self.yaml_data = yaml.safe_load(file)
 
     def load_variables(self):
-        self.SOCRATA_APP_TOKEN = os.getenv('SOCRATA_APP_TOKEN')
-        self.GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
+        self.SOCRATA_APP_TOKEN = self.yaml_data['SOCRATA_APP_TOKEN']
+        self.GCS_BUCKET_NAME = self.yaml_data['GCS_BUCKET_NAME']
         
         # load google credentials file only if environment is local
         if ENVIRONMENT == 'local':
-            self.GOOGLE_CREDENTIALS_FILE = os.getenv('GOOGLE_CREDENTIALS_FILE')
+            self.GOOGLE_CREDENTIALS_FILE = self.yaml_data['GOOGLE_CREDENTIALS_FILE']
         else:
-            self.GOOGLE_CREDENTIALS_FILE = None
+            self.GOOGLE_CREDENTIALS_FILE = os.getenv('GOOGLE_CREDENTIALS_FILE')
         
-        self.ENVIRONMENT = os.getenv('ENVIRONMENT')
+        self.ENVIRONMENT = self.yaml_data['ENVIRONMENT']
         
         # Log the loaded variables for debugging
-        # logger.debug(f"Loaded SOCRATA_APP_TOKEN: {self.SOCRATA_APP_TOKEN}")
-        # logger.debug(f"Loaded GOOGLE_CREDENTIALS_FILE: {self.GOOGLE_CREDENTIALS_FILE}")
-        # logger.debug(f"Loaded GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
-        # logger.debug(f"Loaded ENVIRONMENT: {self.ENVIRONMENT}")
+        logger.debug(f"Loaded SOCRATA_APP_TOKEN: {self.SOCRATA_APP_TOKEN}")
+        logger.debug(f"Loaded GOOGLE_CREDENTIALS_FILE: {self.GOOGLE_CREDENTIALS_FILE}")
+        logger.debug(f"Loaded GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
+        logger.debug(f"Loaded ENVIRONMENT: {self.ENVIRONMENT}")
         
-        # Add any other configuration variables here
 
     def validate_config(self):
         required_vars_local = ['SOCRATA_APP_TOKEN', 'GCS_BUCKET_NAME', 'GOOGLE_CREDENTIALS_FILE']
@@ -59,8 +53,8 @@ class Config:
     def log_config(self):
         logger.info("Configuration loaded successfully")
         logger.debug(f"SOCRATA_APP_TOKEN: {'*' * len(self.SOCRATA_APP_TOKEN) if self.SOCRATA_APP_TOKEN else 'Not set'}")
-        logger.debug(f"GOOGLE_CREDENTIALS_FILE: {'*' * len(self.GOOGLE_CREDENTIALS_FILE) if self.GOOGLE_CREDENTIALS_FILE else 'Not set'}")
         logger.debug(f"GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
+        logger.debug(f"GOOGLE_CREDENTIALS_FILE: {'*' * len(self.GOOGLE_CREDENTIALS_FILE) if self.GOOGLE_CREDENTIALS_FILE else 'Not set'}")
 
 # Create a global instance of the config
 config = Config()

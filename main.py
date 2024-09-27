@@ -1,3 +1,4 @@
+import os
 import uvicorn
 from fastapi import FastAPI
 from api.routes.upload_crime_data_route import router as load_crime_data_router
@@ -14,7 +15,8 @@ async def startup_event():
     logger.info("Starting the FastAPI application")
 
 def main():
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = os.getenv("PORT", 8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 
 if __name__ == "__main__":
     main()
