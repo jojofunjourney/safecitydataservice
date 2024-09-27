@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 from util.logger import logger
 
+# Get the environment from the environment variable
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
+
 class Config:
     def __init__(self):
         self.load_environment()
@@ -11,8 +14,7 @@ class Config:
 
     def load_environment(self):
         # Determine which .env file to load based on an environment variable
-        env = os.getenv('ENVIRONMENT', 'local')
-        env_file = f'.env.{env}'
+        env_file = f'.env.{ENVIRONMENT}'
         
         if os.path.exists(env_file):
             load_dotenv(env_file)
@@ -23,7 +25,13 @@ class Config:
     def load_variables(self):
         self.SOCRATA_APP_TOKEN = os.getenv('SOCRATA_APP_TOKEN')
         self.GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
-        self.GOOGLE_CREDENTIALS_FILE = os.getenv('GOOGLE_CREDENTIALS_FILE')
+        
+        # load google credentials file only if environment is local
+        if ENVIRONMENT == 'local':
+            self.GOOGLE_CREDENTIALS_FILE = os.getenv('GOOGLE_CREDENTIALS_FILE')
+        else:
+            self.GOOGLE_CREDENTIALS_FILE = None
+        
         self.ENVIRONMENT = os.getenv('ENVIRONMENT')
         
         # Log the loaded variables for debugging
@@ -35,7 +43,14 @@ class Config:
         # Add any other configuration variables here
 
     def validate_config(self):
-        required_vars = ['SOCRATA_APP_TOKEN', 'GCS_BUCKET_NAME', 'GOOGLE_CREDENTIALS_FILE']
+        required_vars_local = ['SOCRATA_APP_TOKEN', 'GCS_BUCKET_NAME', 'GOOGLE_CREDENTIALS_FILE']
+        required_vars_non_local = ['SOCRATA_APP_TOKEN', 'GCS_BUCKET_NAME']
+        
+        if ENVIRONMENT == 'local':
+            required_vars = required_vars_local
+        else:
+            required_vars = required_vars_non_local
+            
         missing_vars = [var for var in required_vars if not getattr(self, var)]
         
         if missing_vars:
