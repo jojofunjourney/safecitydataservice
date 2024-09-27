@@ -9,7 +9,7 @@ from google.oauth2 import service_account
 
 def create_bigquery_client():
     env = config.ENVIRONMENT
-    if env == 'prod':
+    if env == 'prod' or env == 'stage':
         client = bigquery.Client()
     else:
         credentials = service_account.Credentials.from_service_account_file(config.GOOGLE_CREDENTIALS_FILE)
