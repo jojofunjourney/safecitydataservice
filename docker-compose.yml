@@ -8,11 +8,13 @@ services:
     ports:
       - "8000:80"
     environment:
-      - ENVIRONMENT=${ENVIRONMENT:-stage}
+      - ENVIRONMENT=local
     env_file:
-      - .env.${ENVIRONMENT:-stage}
+      - .env.${ENVIRONMENT-local}
     volumes:
       - ./safe-city-walk-0188a532813e.json:/app/google-credentials.json:ro
+    stdin_open: true # Enable stdin
+    tty: true # Allocate a pseudo-TTY
 
 volumes:
   google-credentials:

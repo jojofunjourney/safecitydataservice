@@ -35,10 +35,10 @@ class Config:
         self.ENVIRONMENT = os.getenv('ENVIRONMENT')
         
         # Log the loaded variables for debugging
-        logger.debug(f"Loaded SOCRATA_APP_TOKEN: {self.SOCRATA_APP_TOKEN}")
-        logger.debug(f"Loaded GOOGLE_CREDENTIALS_FILE: {self.GOOGLE_CREDENTIALS_FILE}")
-        logger.debug(f"Loaded GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
-        logger.debug(f"Loaded ENVIRONMENT: {self.ENVIRONMENT}")
+        # logger.debug(f"Loaded SOCRATA_APP_TOKEN: {self.SOCRATA_APP_TOKEN}")
+        # logger.debug(f"Loaded GOOGLE_CREDENTIALS_FILE: {self.GOOGLE_CREDENTIALS_FILE}")
+        # logger.debug(f"Loaded GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
+        # logger.debug(f"Loaded ENVIRONMENT: {self.ENVIRONMENT}")
         
         # Add any other configuration variables here
 

@@ -38,6 +38,7 @@ steps:
     - 'safecitydataservice-sa@$PROJECT_ID.iam.gserviceaccount.com'
     - '--region'
     - 'us-central1'
+    - '--allow-unauthenticated'
 
 images:
   - 'gcr.io/$PROJECT_ID/safecitydataservice'
