@@ -52,3 +52,6 @@ htmlcov/
 
 # Google Cloud Service Account
 safe-city-walk-*.json
+
+# Environment variables
+env.yaml

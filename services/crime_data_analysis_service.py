@@ -3,18 +3,24 @@
 # from pyspark.storagelevel import StorageLevel
 from config import config 
 from typing import Any, Callable
+from constants import Environment
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
 def create_bigquery_client():
-    env = config.ENVIRONMENT
-    if env == 'prod' or env == 'stage':
-        client = bigquery.Client()
-    else:
-        credentials = service_account.Credentials.from_service_account_file(config.GOOGLE_CREDENTIALS_FILE)
-        client = bigquery.Client(credentials=credentials, project=credentials.project_id)
-    return client
+      '''
+      Create a BigQuery client based on the environment
+      prod or stage: google cloud run then use the default credentials
+      local or docker: use the credentials in the google-credentials.json file
+      '''
+      env = config.ENVIRONMENT
+      if env == Environment.PROD or env == Environment.STAGE:
+            client = bigquery.Client()
+      else:
+            credentials = service_account.Credentials.from_service_account_file(config.GOOGLE_CREDENTIALS_FILE)
+            client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+      return client
 
 def read_data_from_bigquery(query: str, process_data: Callable[[bigquery.table.RowIterator], Any]) -> Any:
       client = create_bigquery_client()

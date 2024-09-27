@@ -55,3 +55,13 @@ replit.nix
 # Ignore Jupyter Notebook files
 *.ipynb
 .ipynb_checkpoints/
+
+# Environment variables
+env.yaml
+
+# Other files and directories you might want to ignore in Docker context
+.git
+.gitignore
+.env*
+__pycache__
+*.pyc
