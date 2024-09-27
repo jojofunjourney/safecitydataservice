@@ -1,6 +1,6 @@
 import requests
+from config import config
 from typing import List
-from config import SOCRATA_APP_TOKEN
 from models.crime_data_models import UnifiedCrimeData
 from constants import CITY_DATASETS
 from datetime import datetime, timedelta
@@ -29,7 +29,7 @@ def fetch_city_data(city: str, time_range: str) -> List[UnifiedCrimeData]:
     
     try:    
         response = requests.get(api_url, headers={
-            "X-App-Token": SOCRATA_APP_TOKEN,
+            "X-App-Token": config.SOCRATA_APP_TOKEN,
             "Accept": "application/json"
         })
         response.raise_for_status()

@@ -1,8 +1,9 @@
+from config import config
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from services.upload_crime_data_service import upload_crime_data_to_gcs
 from services.upload_coordinate_crime_data_service import upload_coordinate_crime_data_to_gcs
-from config import GCS_BUCKET_NAME
 from models.crime_data_models import TIME_RANGES, CITIES
 from util.fetch_crime_data import fetch_city_data
 from util.logger import logger
@@ -30,12 +31,12 @@ async def upload_crime_data(request: UpLoadCrimeDataRequest) -> UpLoadCrimeDataR
         
         # upload all crime data to GCS
         logger.info(f"Uploading all crime data to GCS for {city}")
-        transformed_data = upload_crime_data_to_gcs(raw_data, city, time_range, GCS_BUCKET_NAME)
+        transformed_data = upload_crime_data_to_gcs(raw_data, city, time_range, config.GCS_BUCKET_NAME)
         logger.info(f"Successfully uploaded all crime data to GCS for {city}")
         
         # upload coordinate crime data to GCS
         logger.info(f"Uploading coordinate crime data to GCS for {city}")
-        upload_coordinate_crime_data_to_gcs(transformed_data, city, time_range, GCS_BUCKET_NAME)
+        upload_coordinate_crime_data_to_gcs(transformed_data, city, time_range, config.GCS_BUCKET_NAME)
         logger.info(f"Successfully uploaded coordinate crime data to GCS for {city}")
         
         success_message = f"Crime data for {city} loaded successfully"

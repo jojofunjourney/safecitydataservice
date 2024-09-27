@@ -1,21 +1,55 @@
 import os
 from dotenv import load_dotenv
-import json
 from util.logger import logger
 
-# Load environment variables from .env file
-load_dotenv()
+class Config:
+    def __init__(self):
+        self.load_environment()
+        self.load_variables()
+        self.validate_config()
+        self.log_config()
 
-# Access environment variables
-SOCRATA_APP_TOKEN = os.getenv('SOCRATA_APP_TOKEN')
-GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS', '')
-GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
+    def load_environment(self):
+        # Determine which .env file to load based on an environment variable
+        env = os.getenv('ENVIRONMENT', 'local')
+        env_file = f'.env.{env}'
+        
+        if os.path.exists(env_file):
+            load_dotenv(env_file)
+            logger.info(f"Configuration loaded from {env_file}")
+        else:
+            logger.warning(f"{env_file} not found, using environment variables")
 
-# Debugging: Print the value of GOOGLE_APPLICATION_CREDENTIALS
-# Parse the JSON string for Google Application Credentials
-try:
-    GOOGLE_APPLICATION_CREDENTIALS_JSON = json.loads(GOOGLE_APPLICATION_CREDENTIALS)
-except json.JSONDecodeError as e:
-    print(f"Error parsing GOOGLE_APPLICATION_CREDENTIALS: {e}")
-    print("Please ensure the JSON string is properly formatted and escaped.")
-    GOOGLE_APPLICATION_CREDENTIALS_JSON = None
+    def load_variables(self):
+        self.SOCRATA_APP_TOKEN = os.getenv('SOCRATA_APP_TOKEN')
+        self.GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
+        self.GOOGLE_CREDENTIALS_FILE = os.getenv('GOOGLE_CREDENTIALS_FILE')
+        self.ENVIRONMENT = os.getenv('ENVIRONMENT')
+        
+        # Log the loaded variables for debugging
+        logger.debug(f"Loaded SOCRATA_APP_TOKEN: {self.SOCRATA_APP_TOKEN}")
+        logger.debug(f"Loaded GOOGLE_CREDENTIALS_FILE: {self.GOOGLE_CREDENTIALS_FILE}")
+        logger.debug(f"Loaded GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
+        logger.debug(f"Loaded ENVIRONMENT: {self.ENVIRONMENT}")
+        
+        # Add any other configuration variables here
+
+    def validate_config(self):
+        required_vars = ['SOCRATA_APP_TOKEN', 'GCS_BUCKET_NAME', 'GOOGLE_CREDENTIALS_FILE']
+        missing_vars = [var for var in required_vars if not getattr(self, var)]
+        
+        if missing_vars:
+            raise EnvironmentError(f"Missing required environment variables: {', '.join(missing_vars)}")
+
+    def log_config(self):
+        logger.info("Configuration loaded successfully")
+        logger.debug(f"SOCRATA_APP_TOKEN: {'*' * len(self.SOCRATA_APP_TOKEN) if self.SOCRATA_APP_TOKEN else 'Not set'}")
+        logger.debug(f"GOOGLE_CREDENTIALS_FILE: {'*' * len(self.GOOGLE_CREDENTIALS_FILE) if self.GOOGLE_CREDENTIALS_FILE else 'Not set'}")
+        logger.debug(f"GCS_BUCKET_NAME: {self.GCS_BUCKET_NAME}")
+
+# Create a global instance of the config
+config = Config()
+
+# You can now import this config object in other files
+# from config import config
+# Example usage: socrata_token = config.SOCRATA_APP_TOKEN

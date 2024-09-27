@@ -9,6 +9,12 @@ app = FastAPI(title="City Crime Data API", version="1.0.0")
 app.include_router(load_crime_data_router)
 app.include_router(crime_data_analysis_router)
 
-if __name__ == "__main__":
+@app.on_event("startup")
+async def startup_event():
     logger.info("Starting the FastAPI application")
+
+def main():
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+if __name__ == "__main__":
+    main()
