@@ -5,14 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8000:80"
     environment:
-      - ENVIRONMENT=local
+      - ENVIRONMENT=docker
+    ports:
+      - "${PORT:-8000}:80"
     env_file:
-      - .env.${ENVIRONMENT-local}
+      - .env
     volumes:
       - ./safe-city-walk-0188a532813e.json:/app/google-credentials.json:ro
+      # - ./env.yaml:/app/env.yaml:ro
     stdin_open: true # Enable stdin
     tty: true # Allocate a pseudo-TTY
 

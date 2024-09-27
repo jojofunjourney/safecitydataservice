@@ -1,4 +1,19 @@
+from enum import Enum
 from models.crime_data_models import CityDataset, CityDatasets
+
+class Environment(Enum):
+    LOCAL = "local"
+    DOCKER = "docker"
+    REPLIT = "replit"
+    PROD = "prod"
+    STAGE = "stage"
+
+class EnvironmentVariable(Enum):
+    ENVIRONMENT = "ENVIRONMENT"
+    SOCRATA_APP_TOKEN = "SOCRATA_APP_TOKEN"
+    GCS_BUCKET_NAME = "GCS_BUCKET_NAME"
+    GOOGLE_CREDENTIALS_FILE = "GOOGLE_CREDENTIALS_FILE"
+    GOOGLE_CREDENTIALS_FILE_LOCAL = "GOOGLE_CREDENTIALS_FILE_LOCAL"
 
 DATA_LIMIT = 10000
 
