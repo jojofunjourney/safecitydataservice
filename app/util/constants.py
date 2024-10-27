@@ -11,16 +11,6 @@ class Environment(Enum):
     def __str__(self)   :
         return self.value
 
-class EnvironmentVariable(Enum):
-    ENVIRONMENT = "ENVIRONMENT"
-    SOCRATA_APP_TOKEN = "SOCRATA_APP_TOKEN"
-    GCS_BUCKET_NAME = "GCS_BUCKET_NAME"
-    GOOGLE_CREDENTIALS_FILE = "GOOGLE_CREDENTIALS_FILE"
-    GOOGLE_CREDENTIALS_FILE_LOCAL = "GOOGLE_CREDENTIALS_FILE_LOCAL"
-    
-    def __str__(self):
-        return self.value
-
 DATA_LIMIT = 10000
 
 CITY_DATASETS: CityDatasets = CityDatasets(

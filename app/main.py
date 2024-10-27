@@ -8,12 +8,13 @@ from app.util import logger
 from app.core.config import settings
 
 print("Loading app/main.py")
-print(f"Config object in main: {settings}")
 print(f"Config dict in main: {settings.dict()}")
 
 # Get the environment from the ENV variable or default to 'local'
 env = os.getenv("ENVIRONMENT", "local")
 logger.info(f"Running in {env} environment")
+port = int(os.getenv("PORT", 8080))
+logger.info(f"Running on port {port}")
 
 # Initialize FastAPI app with environment-specific title and version
 app = FastAPI(
@@ -26,7 +27,7 @@ app.include_router(api_router)
 
 # Configure CORS based on environment (example: more open CORS for local)
 origins = (
-    ["http://localhost", "http://localhost:8000", "http://localhost:3000"]
+    ["http://localhost"]
     if env == "local"
     else ["https://your-production-site.com"]
 )
@@ -53,5 +54,4 @@ async def shutdown_event():
 if __name__ == "__main__":
     # Reload only for the 'local' environment
     reload = env == "local"
-    port = int(os.getenv("PORT", 8080))
     uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=reload)

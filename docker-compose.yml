@@ -1,17 +1,16 @@
 version: "3.8"
 
 services:
-  safecitydataservice:
+  safecitydataservice_docker:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ENV=docker # Set ENV to 'docker'
-      - PORT=${PORT:-8080} # Default to port 8080, can be overridden
-    ports:
-      - "${PORT:-8080}:8080" # Map the host's port to container's port 80
+      - ENVIRONMENT=docker # Set ENV to 'docker'
     env_file:
-      - .env.docker # Load environment variables from .env.docker
+      - .env.docker
+    ports:
+      - "8000:8080" # 8080 is the host port (8080 in localhost is occupied by another service), 8080 is the container port
     volumes:
       - ./safecitydataservice.json:/app/google-credentials.json:ro # Mount credentials as read-only
     stdin_open: true # Enable stdin (useful for debugging)
