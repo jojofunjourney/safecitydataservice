@@ -20,7 +20,7 @@ steps:
       - '--region=us-west1'  # Updated to your preferred Cloud Run region
       - '--platform=managed'
       - '--allow-unauthenticated'  # Allow public access; remove if using IAM authentication
-      - '--set-env-vars=ENVIRONMENT=stage,PORT=8080,GCS_BUCKET_NAME=city-crime-data,GCP_PROJECT_ID=safecitydataservice'
+      - '--set-env-vars=ENVIRONMENT=stage,PORT=8080,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
       - '--set-secrets=SOCRATA_APP_TOKEN=projects/$PROJECT_ID/secrets/SOCRATA_APP_TOKEN/versions/latest'
 
 substitutions:
