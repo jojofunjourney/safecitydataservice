@@ -30,8 +30,8 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 # Debug: Check contents of /app after installing dependencies
 RUN echo "Contents of /app after installing dependencies:" && ls -la /app
 
-# Expose port 8000 for the container
-EXPOSE 8000
+# Expose port 8080 for the container
+EXPOSE 8080
 
 # Use ENTRYPOINT for dynamic environment-specific commands
 ENTRYPOINT ["sh", "-c", "poetry run uvicorn app.main:app --host 0.0.0.0"]

@@ -15,7 +15,7 @@ CrimeDataResult = Union[CrimeDataList, CoordinateCrimeDataList]
 def create_bigquery_client():
     env = config.ENVIRONMENT
     logger.debug(f"Environment: {env}")
-    if env in [Environment.PROD, Environment.STAGE]:
+    if Environment(env) in [Environment.PROD, Environment.STAGE]:
         client = bigquery.Client()
     else:
         credentials_file = config.GOOGLE_CREDENTIALS_FILE

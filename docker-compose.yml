@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - ENV=docker # Set ENV to 'docker'
-      - PORT=${PORT:-8000} # Default to port 8000, can be overridden
+      - PORT=${PORT:-8080} # Default to port 8080, can be overridden
     ports:
-      - "${PORT:-8000}:8000" # Map the host's port to container's port 80
+      - "${PORT:-8080}:8080" # Map the host's port to container's port 80
     env_file:
       - .env.docker # Load environment variables from .env.docker
     volumes:

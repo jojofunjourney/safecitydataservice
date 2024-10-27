@@ -12,7 +12,7 @@ print(f"Config object in main: {settings}")
 print(f"Config dict in main: {settings.dict()}")
 
 # Get the environment from the ENV variable or default to 'local'
-env = os.getenv("ENV", "local")
+env = os.getenv("ENVIRONMENT", "local")
 logger.info(f"Running in {env} environment")
 
 # Initialize FastAPI app with environment-specific title and version

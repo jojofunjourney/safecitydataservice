@@ -11,7 +11,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'prod')
 logger.info(f"Current environment: {ENVIRONMENT}")
 
 # Load environment variables from the appropriate .env file
-if ENVIRONMENT in [Environment.LOCAL.value, Environment.DOCKER.value, Environment.REPLIT.value]:
+if Environment(ENVIRONMENT) in [Environment.LOCAL, Environment.DOCKER, Environment.REPLIT]:
     env_file = f".env.{ENVIRONMENT}"
     load_dotenv(env_file)
     logger.info(f"Loaded environment variables from {env_file}")
