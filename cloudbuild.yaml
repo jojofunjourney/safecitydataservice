@@ -1,5 +1,13 @@
 # cloudbuild.yaml
 
+options:
+  # Option 1: Log only to Cloud Logging, bypassing the need for a Cloud Storage bucket
+  logging: CLOUD_LOGGING_ONLY
+
+  # Option 2 (alternative): Automatically use a regional, user-owned logs bucket
+  # Uncomment the following line if you prefer this behavior instead of logging only to Cloud Logging
+  # default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
+
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -20,7 +28,7 @@ steps:
       - '--region=us-west1'  # Updated to your preferred Cloud Run region
       - '--platform=managed'
       - '--allow-unauthenticated'  # Allow public access; remove if using IAM authentication
-      - '--set-env-vars=ENVIRONMENT=stage,PORT=8080,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
+      - '--set-env-vars=ENVIRONMENT=stage,PORT=8080,GCS_BUCKET_NAME=city-crime-data,GCP_PROJECT_ID=safecitydataservice'
       - '--set-secrets=SOCRATA_APP_TOKEN=projects/$PROJECT_ID/secrets/SOCRATA_APP_TOKEN/versions/latest'
 
 substitutions:
