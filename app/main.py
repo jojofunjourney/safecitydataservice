@@ -12,9 +12,8 @@ print(f"Config dict in main: {settings.dict()}")
 
 # Get the environment from the ENV variable or default to 'local'
 env = os.getenv("ENVIRONMENT", "local")
-logger.info(f"Running in {env} environment")
 port = int(os.getenv("PORT", 8080))
-logger.info(f"Running on port {port}")
+logger.info(f"Running in {env} environment with port {port}")
 
 # Initialize FastAPI app with environment-specific title and version
 app = FastAPI(
