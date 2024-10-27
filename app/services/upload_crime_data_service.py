@@ -2,10 +2,10 @@ import csv
 from io import StringIO
 from typing import List, Type
 from dataclasses import asdict
-from util.crime_data_util import transform_crime_data
-from models.crime_data_models import UnifiedCrimeData, UnifiedCrimeDataFieldNames
-from util.logger import logger
-from util.gcs_util import upload_to_gcs
+
+from app.util import logger
+from app.api_util import transform_crime_data, upload_to_gcs
+from app.models import UnifiedCrimeData, UnifiedCrimeDataFieldNames
 
 def upload_crime_data_to_gcs(raw_data: List[UnifiedCrimeData], city: str, time_range: str, bucket_name: str) -> List[UnifiedCrimeData]:
     file_name = f"{city.lower()}_crime_data_{time_range.lower()}.csv"

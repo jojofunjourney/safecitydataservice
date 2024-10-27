@@ -6,16 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ENVIRONMENT=docker
+      - ENV=docker # Set ENV to 'docker'
+      - PORT=${PORT:-8000} # Default to port 8000, can be overridden
     ports:
-      - "${PORT:-8000}:80"
+      - "${PORT:-8000}:8000" # Map the host's port to container's port 80
     env_file:
-      - .env
+      - .env.docker # Load environment variables from .env.docker
     volumes:
-      - ./safe-city-walk-0188a532813e.json:/app/google-credentials.json:ro
-      # - ./env.yaml:/app/env.yaml:ro
-    stdin_open: true # Enable stdin
+      - ./safecitydataservice.json:/app/google-credentials.json:ro # Mount credentials as read-only
+    stdin_open: true # Enable stdin (useful for debugging)
     tty: true # Allocate a pseudo-TTY
 
 volumes:
   google-credentials:
+    driver: local # Optional: local volume driver for clarity

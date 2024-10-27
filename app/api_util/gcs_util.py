@@ -1,5 +1,5 @@
 from google.cloud import storage
-from util.logger import logger
+from app.util import logger
 
 def upload_to_gcs(csv_data: str, bucket_name: str, blob_name: str):
     storage_client = storage.Client()

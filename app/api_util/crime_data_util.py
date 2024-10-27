@@ -1,6 +1,6 @@
 from typing import List, Dict, Type
-from models.crime_data_models import UnifiedCrimeData, NewYorkCrimeData, LosAngelesCrimeData, SeattleCrimeData, ChicagoCrimeData, CITY_DATA_MODELS, CITIES
-from util.logger import logger
+from app.models import UnifiedCrimeData, NewYorkCrimeData, LosAngelesCrimeData, SeattleCrimeData, ChicagoCrimeData, CITY_DATA_MODELS, CITIES
+from app.util import logger
 
 city_dataclass_map: Dict[CITIES, Type[CITY_DATA_MODELS]] = {
     CITIES.NEW_YORK: NewYorkCrimeData,

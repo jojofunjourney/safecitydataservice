@@ -4,26 +4,30 @@ version = "0.1.0"
 description = "Safe City Walk Data Service"
 authors = ["Your Name <your.email@example.com>"]
 packages = [
-    { include = "**/*.py" },
+    { include = "app" }
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "0.95.0"
-uvicorn = "0.15.0"
-pydantic = "1.10.2"
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+pydantic = "^2.9.2"
 pytz = "2024.1"
-requests = "2.26.0"
-python-dotenv = "0.19.0"
-google-cloud-storage = "2.10.0"
-google-cloud-bigquery = "3.11.4"
-google-auth = "2.23.3"
-google-auth-oauthlib = "1.1.0"
-pyyaml = "6.0.1"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
+google-cloud-storage = "^2.10.0"
+google-cloud-bigquery = "^3.11.4"
+google-auth = "^2.23.3"
+google-auth-oauthlib = "^1.1.0"
+pyyaml = "^6.0.1"
+dynaconf = "^3.2.0"
+grpcio = "^1.67.0"
 
 [tool.poetry.scripts]
-start = "main:main"
-dev = "main:main"
+prod = "uvicorn app.main:app --port 8000 --host 0.0.0.0"
+stage = "uvicorn app.main:app --port 8000 --host 0.0.0.0"
+docker = "uvicorn app.main:app --port 8000 --host 0.0.0.0"
+local = "uvicorn app.main:app --port 8000 --host 0.0.0.0 --reload"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

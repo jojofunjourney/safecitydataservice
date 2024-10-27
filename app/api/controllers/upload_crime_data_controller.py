@@ -1,12 +1,11 @@
-from config import config
-
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from services.upload_crime_data_service import upload_crime_data_to_gcs
-from services.upload_coordinate_crime_data_service import upload_coordinate_crime_data_to_gcs
-from models.crime_data_models import TIME_RANGES, CITIES
-from util.fetch_crime_data import fetch_city_data
-from util.logger import logger
+
+from app.core.config import settings as config
+from app.services import upload_crime_data_to_gcs, upload_coordinate_crime_data_to_gcs
+from app.models import TIME_RANGES, CITIES
+from app.util import logger
+from app.api_util import fetch_city_data
 
 router = APIRouter()
 
@@ -20,8 +19,8 @@ class UpLoadCrimeDataResponse(BaseModel):
 @router.post("/", response_model=UpLoadCrimeDataResponse)
 async def upload_crime_data(request: UpLoadCrimeDataRequest) -> UpLoadCrimeDataResponse:
     try:
-        city = request.city.value
-        time_range = request.time_range.value
+        city = request.city
+        time_range = request.time_range
         logger.info(f"Received request to upload crime data for {city} with time range: {time_range}")
         
         # fetch crime raw data

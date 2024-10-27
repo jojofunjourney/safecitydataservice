@@ -1,12 +1,14 @@
 import requests
-from config import config
 from typing import List
-from models.crime_data_models import UnifiedCrimeData
-from constants import CITY_DATASETS
+from app.util import logger
 from datetime import datetime, timedelta
 
-def fetch_city_data(city: str, time_range: str) -> List[UnifiedCrimeData]:
-    print(f"Fetching data for {city} with time range: {time_range}")
+from app.core import settings as config
+from app.models import UnifiedCrimeData, CITIES, TIME_RANGES
+from app.util import CITY_DATASETS
+
+def fetch_city_data(city: CITIES, time_range: TIME_RANGES) -> List[UnifiedCrimeData]:
+    
     end_date = datetime.now()
     
     if time_range == "1year":
@@ -22,10 +24,13 @@ def fetch_city_data(city: str, time_range: str) -> List[UnifiedCrimeData]:
     start_date_str = start_date.strftime("%Y-%m-%d")
     end_date_str = end_date.strftime("%Y-%m-%d")
     
+    logger.debug(f"start_date_str: {start_date_str}, end_date_str: {end_date_str}")
     city_api = CITY_DATASETS.__dict__[city]
     
+    logger.debug(f"city_api: {city_api}")
+    
     api_url = f"{city_api.apiEndpoint}?{city_api.query.format(start_date=start_date_str, end_date=end_date_str)}"
-    print(f"Fetching data for {city} with api_url: {api_url}")
+    logger.debug(f"Fetching data for {city} with api_url: {api_url}")
     
     try:    
         response = requests.get(api_url, headers={

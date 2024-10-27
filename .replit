@@ -1,5 +1,5 @@
-run = ["uvicorn", "main:app", "--host", "0.0.0.0", "--reload"]
-modules = ["python-3.10"]
+run = ["sh", "-c", "ENV=replit PORT=8000 poetry run start"]
+modules = ["python-3.12"]
 
 hidden = [".pythonlibs"]
 
@@ -7,7 +7,7 @@ hidden = [".pythonlibs"]
 channel = "stable-24_05"
 
 [deployment]
-run = ["uvicorn", "main:app", "--host", "0.0.0.0"]
+run = ["sh", "-c", "ENV=replit PORT=8000 poetry run start"]
 deploymentTarget = "cloudrun"
 
 [[ports]]
