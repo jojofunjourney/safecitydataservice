@@ -11,7 +11,7 @@ services:
     env_file:
       - .env.docker
     ports:
-      - "8000:8080" # 8080 is the host port (8080 in localhost is occupied by another service), 8080 is the container port
+      - "8000:8080" # 8000 is the host port (8080 in localhost is occupied by another service), 8080 is the container port
     volumes:
       - ./safecitydataservice.json:/app/google-credentials.json:ro # Mount credentials as read-only
     stdin_open: true # Enable stdin (useful for debugging)
