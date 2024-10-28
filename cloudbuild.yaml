@@ -4,13 +4,13 @@ options:
   logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging, bypassing Cloud Storage bucket requirements
 
 steps:
-  # Step 1: Build the Docker image
+  # Step 1: Set up buildx (required for using multi-platform)
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA', '.']
+    args: ['buildx', 'create', '--use']
 
-  # Step 2: Push the Docker image to Artifact Registry or Google Container Registry
+  # Step 2: Build the Docker image with buildx for the specified platform
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA']
+    args: ['buildx', 'build', '--platform=linux/amd64', '-t', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA', '--push', '.']
 
   # Step 3: Deploy the image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

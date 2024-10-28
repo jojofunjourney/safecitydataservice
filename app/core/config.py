@@ -7,7 +7,7 @@ from app.util.constants import Environment
 from app.util.logger import logger
 
 # ENV: local, docker, replit, stage, prod
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'prod')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
 logger.info(f"Current environment: {ENVIRONMENT}")
 
 # Load environment variables from the appropriate .env file

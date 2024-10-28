@@ -37,4 +37,5 @@ RUN echo "Contents of /app after installing dependencies:" && ls -la /app
 EXPOSE 8080 
 
 # Use ENTRYPOINT to directly start the FastAPI app with Uvicorn
-ENTRYPOINT ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# ENTRYPOINT ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["sh", "-c", "poetry run ${ENVIRONMENT}"]
