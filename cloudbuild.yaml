@@ -1,10 +1,7 @@
 # cloudbuild.yaml
 
-options:
-  logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging, bypassing Cloud Storage bucket requirements
-
 steps:
-  # Step 1: Set up buildx (required for multi-platform)
+  # Step 1: Set up buildx for multi-platform
   - name: 'gcr.io/cloud-builders/docker'
     args: ['buildx', 'create', '--use']
 
@@ -18,24 +15,24 @@ steps:
       '.'
     ]
 
-  # Step 3: Check if the image exists before deploying (with error handling)
+  # Step 3: Add a longer delay to allow the image to propagate
+  - name: 'alpine'
+    entrypoint: 'sh'
+    args: ['-c', 'sleep 30']  # Adjust the delay duration if necessary
+
+  # Step 4: Deploy the image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
+    entrypoint: gcloud
     args:
-      - '-c'
-      - |
-        if gcloud container images describe gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA > /dev/null 2>&1; then
-          echo "Image found. Proceeding with deployment."
-          gcloud run deploy safecitydataservice \
-            --image=gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA \
-            --region=us-west1 \
-            --platform=managed \
-            --allow-unauthenticated \
-            --set-env-vars=ENVIRONMENT=stage,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice \
-            --set-secrets=SOCRATA_APP_TOKEN=SOCRATA_APP_TOKEN:latest
-        else
-          echo "Warning: Image not found in registry. Skipping deployment but marking build as success."
-        fi
+      - 'run'
+      - 'deploy'
+      - 'safecitydataservice'
+      - '--image=gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA'
+      - '--region=us-west1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars=ENVIRONMENT=stage,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
+      - '--set-secrets=SOCRATA_APP_TOKEN=SOCRATA_APP_TOKEN:latest'
 
 substitutions:
   _COMMIT_SHA: '${SHORT_SHA}'
