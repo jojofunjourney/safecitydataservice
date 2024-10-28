@@ -3,6 +3,9 @@
 options:
   logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging, bypassing Cloud Storage bucket requirements
 
+substitutions:
+  _ENVIRONMENT: 'stage'  # Default value; can be overridden in the Cloud Build trigger
+
 steps:
   # Step 1: Set up buildx for multi-platform
   - name: 'gcr.io/cloud-builders/docker'
@@ -23,7 +26,7 @@ steps:
     entrypoint: 'sh'
     args: ['-c', 'sleep 30']  # Adjust the delay duration if necessary
 
-  # Step 4: Deploy the image to Cloud Run
+  # Step 4: Deploy the image to Cloud Run with dynamic ENVIRONMENT
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -34,11 +37,8 @@ steps:
       - '--region=us-west1'
       - '--platform=managed'
       - '--allow-unauthenticated'
-      - '--set-env-vars=ENVIRONMENT=stage,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
+      - '--set-env-vars=ENVIRONMENT=${_ENVIRONMENT},GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
       - '--set-secrets=SOCRATA_APP_TOKEN=SOCRATA_APP_TOKEN:latest'
-
-substitutions:
-  _COMMIT_SHA: '${SHORT_SHA}'
 
 images:
   - 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA'
