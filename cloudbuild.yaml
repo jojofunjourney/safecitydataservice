@@ -1,5 +1,8 @@
 # cloudbuild.yaml
 
+options:
+  logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging, bypassing Cloud Storage bucket requirements
+
 steps:
   # Step 1: Set up buildx for multi-platform
   - name: 'gcr.io/cloud-builders/docker'
