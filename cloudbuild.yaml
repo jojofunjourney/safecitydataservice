@@ -23,6 +23,22 @@ steps:
       '.'
     ]
 
+    # Step 3: Verify the image exists in the registry
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        for i in {1..5}; do
+          if gcloud container images describe gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA > /dev/null 2>&1; then
+            echo "Image found in registry."
+            break
+          else
+            echo "Image not found, retrying..."
+            sleep 5
+          fi
+        done
+
   # Step 4: Deploy the image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
