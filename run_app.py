@@ -3,6 +3,8 @@ import sys
 import uvicorn
 
 def run_app(environment):
+    # Set the environment variable for the app
+    os.environ["ENVIRONMENT"] = environment
     host = "0.0.0.0"
     port = int(os.environ.get("PORT", 8080))
     reload = False

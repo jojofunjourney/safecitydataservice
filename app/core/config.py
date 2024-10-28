@@ -24,8 +24,6 @@ class Settings(BaseModel):
     GOOGLE_CREDENTIALS_FILE: Optional[str] = Field(default=os.getenv('GOOGLE_CREDENTIALS_FILE'))
 
     class Config:
-        env_file = env_file
-        env_file_encoding = 'utf-8'
         use_enum_values = True
 
 def get_settings() -> Settings:
