@@ -48,9 +48,3 @@ async def startup_event():
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Shutting down the FastAPI application")
-
-# Run the application with environment-specific options
-if __name__ == "__main__":
-    # Reload only for the 'local' environment
-    reload = env == "local"
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=reload)
