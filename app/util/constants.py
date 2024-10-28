@@ -1,5 +1,5 @@
 from enum import Enum
-from models.crime_data_models import CityDataset, CityDatasets
+from app.models import CityDataset, CityDatasets
 
 class Environment(Enum):
     LOCAL = "local"
@@ -7,18 +7,14 @@ class Environment(Enum):
     REPLIT = "replit"
     PROD = "prod"
     STAGE = "stage"
-
-class EnvironmentVariable(Enum):
-    ENVIRONMENT = "ENVIRONMENT"
-    SOCRATA_APP_TOKEN = "SOCRATA_APP_TOKEN"
-    GCS_BUCKET_NAME = "GCS_BUCKET_NAME"
-    GOOGLE_CREDENTIALS_FILE = "GOOGLE_CREDENTIALS_FILE"
-    GOOGLE_CREDENTIALS_FILE_LOCAL = "GOOGLE_CREDENTIALS_FILE_LOCAL"
+    
+    def __str__(self)   :
+        return self.value
 
 DATA_LIMIT = 10000
 
 CITY_DATASETS: CityDatasets = CityDatasets(
-    newYork=CityDataset(
+    newyork=CityDataset(
         endpoint="data.cityofnewyork.us",
         identifier="5uac-w243",
         datasetUrl="https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243",
@@ -32,7 +28,7 @@ CITY_DATASETS: CityDatasets = CityDatasets(
         apiEndpoint="https://data.seattle.gov/resource/tazs-3rd5.json",
         query="$where=offense_start_datetime >= '{start_date}T00:00:00' AND offense_start_datetime <= '{end_date}T23:59:59'"
     ),
-    losAngeles=CityDataset(
+    losangeles=CityDataset(
         endpoint="data.lacity.org",
         identifier="2nrs-mtv8",
         datasetUrl="https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8",

@@ -1,0 +1,44 @@
+# cloudbuild.yaml
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging
+
+steps:
+  # Step 1: Install buildx explicitly (required for multi-platform support)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['buildx', 'version']
+
+  # Step 2: Set up a new builder instance for buildx
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['buildx', 'create', '--use', '--name', 'mybuilder']
+
+  # Step 3: Build and push the Docker image with buildx for the specified platform
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'buildx', 'build',
+      '--builder=mybuilder',
+      '--platform=linux/amd64',
+      '-t', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA',
+      '--push',
+      '.'
+    ]
+
+  # Step 4: Deploy the image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'safecitydataservice'  # Replace with your Cloud Run service name
+      - '--image=gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA'
+      - '--region=us-west1'  # Set to the Cloud Run region
+      - '--platform=managed'
+      - '--allow-unauthenticated'  # Allow public access; remove if using IAM authentication
+      - '--set-env-vars=ENVIRONMENT=stage,GCS_BUCKET_NAME=safecitycrimedata,GCP_PROJECT_ID=safecitydataservice'
+      - '--set-secrets=SOCRATA_APP_TOKEN=SOCRATA_APP_TOKEN:latest'
+
+substitutions:
+  _COMMIT_SHA: '${SHORT_SHA}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA'

@@ -1,10 +1,10 @@
 from typing import List, Dict
-from models.crime_data_models import UnifiedCrimeData
-from util.logger import logger
-from util.gcs_util import upload_to_gcs
 from io import StringIO
 import csv
-from util.crime_data_util import count_crimes_by_coordinate
+
+from app.models.crime_data_models import UnifiedCrimeData
+from app.util import logger
+from app.api_util import upload_to_gcs, count_crimes_by_coordinate
 
 
 def convert_coordinate_crime_data_to_csv(data: Dict[str, int]) -> str:
@@ -20,7 +20,7 @@ def convert_coordinate_crime_data_to_csv(data: Dict[str, int]) -> str:
 
 
 def upload_coordinate_crime_data_to_gcs(data: List[UnifiedCrimeData], city: str, time_range: str, bucket_name: str):
-    file_name = f"{city.lower()}_coordiante_crime_data_{time_range.lower()}.csv"
+    file_name = f"{city.lower()}_coordinate_crime_data_{time_range.lower()}.csv"
     print(f"Uploading coordiante crime data: {file_name} to {bucket_name}")
     
     # Transform data

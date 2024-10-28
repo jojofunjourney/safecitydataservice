@@ -1,19 +1,74 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, TypedDict
 from dataclasses import dataclass, fields
 from enum import Enum
 import pytz
 from datetime import datetime
+from pydantic import BaseModel
 
 class TIME_RANGES(str, Enum):
     ONE_YEAR = "1year"
     SIX_MONTHS = "6months"
     THREE_MONTHS = "3months"
 
+    def __str__(self):
+        return self.value
+
 class CITIES(str, Enum):
-    NEW_YORK = "newYork"
-    LOS_ANGELES = "losAngeles"
+    NEW_YORK = "newyork"
+    LOS_ANGELES = "losangeles"
     SEATTLE = "seattle"
     CHICAGO = "chicago"
+    
+    def __str__(self):
+        return self.value
+
+class DATA_TYPE(str, Enum):
+    CRIME_DATA = "crime_data"
+    COORDINATE_CRIME_DATA = "coordinate_crime_data"
+
+    def __str__(self):
+        return self.value
+
+class CreateCrimeData(BaseModel):
+    crime_type: str
+    count: int
+    percentage: float
+
+class CrimeDataList(BaseModel):
+    total_crimes: int
+    crime_statistics: List[CreateCrimeData]
+
+class CreateCoordinateCrimeData(BaseModel):
+    coordinate: str
+    crime_count: int
+
+class CoordinateCrimeDataList(BaseModel):
+    coordinate_crime_data: List[CreateCoordinateCrimeData]
+
+@dataclass
+class CreateCSVFileName:
+    city: CITIES
+    time_range: TIME_RANGES
+    data_type: DATA_TYPE
+
+    def generate_file_name(self) -> str:
+        return f"{self.city}_{self.data_type}_{self.time_range}.csv"
+
+@dataclass
+class BigQueryDataset:
+    city: CITIES
+
+    def get_dataset_name(self) -> str:
+        return f"{self.city}_crime_data"
+
+@dataclass
+class BigQueryTableName:
+    city: CITIES
+    time_range: TIME_RANGES
+    data_type: DATA_TYPE
+
+    def get_table_name(self) -> str:
+        return f"{self.city}_{self.data_type}_{self.time_range}"
 
 @dataclass
 class CityDataset:
@@ -241,7 +296,23 @@ class ChicagoCrimeData(CITY_DATA_MODELS):
 
 @dataclass
 class CityDatasets:
-    newYork: CityDataset
-    losAngeles: CityDataset
+    newyork: CityDataset
+    losangeles: CityDataset
     seattle: CityDataset
     chicago: CityDataset
+
+class CrimeStatistic(BaseModel):
+    crime_type: str
+    count: int
+    percentage: float
+
+class CrimeDataAnalysis(BaseModel):
+    total_crimes: int
+    crime_statistics: List[CrimeStatistic]
+
+class CoordinateCrimeData(BaseModel):
+    coordinate: str
+    crime_count: int
+
+class CoordinateCrimeDataAnalysis(BaseModel):
+    coordinate_crime_data: List[CoordinateCrimeData]

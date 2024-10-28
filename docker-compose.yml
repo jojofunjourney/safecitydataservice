@@ -1,21 +1,22 @@
 version: "3.8"
 
 services:
-  safecitydataservice:
+  safecitydataservice_docker:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ENVIRONMENT=docker
-    ports:
-      - "${PORT:-8000}:80"
+      - ENVIRONMENT=docker # Set ENV to 'docker'
+      - PORT=8080
     env_file:
-      - .env
+      - .env.docker
+    ports:
+      - "8000:8080" # 8000 is the host port (8080 in localhost is occupied by another service), 8080 is the container port
     volumes:
-      - ./safe-city-walk-0188a532813e.json:/app/google-credentials.json:ro
-      # - ./env.yaml:/app/env.yaml:ro
-    stdin_open: true # Enable stdin
+      - ./safecitydataservice.json:/app/google-credentials.json:ro # Mount credentials as read-only
+    stdin_open: true # Enable stdin (useful for debugging)
     tty: true # Allocate a pseudo-TTY
 
 volumes:
   google-credentials:
+    driver: local # Optional: local volume driver for clarity
