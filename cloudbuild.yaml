@@ -1,18 +1,29 @@
 # cloudbuild.yaml
 
 options:
-  logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging, bypassing Cloud Storage bucket requirements
+  logging: CLOUD_LOGGING_ONLY  # Direct logs to Cloud Logging
 
 steps:
-  # Step 1: Set up buildx (required for using multi-platform)
+  # Step 1: Install buildx explicitly (required for multi-platform support)
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['buildx', 'create', '--use']
+    args: ['buildx', 'version']
 
-  # Step 2: Build the Docker image with buildx for the specified platform
+  # Step 2: Set up a new builder instance for buildx
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['buildx', 'build', '--platform=linux/amd64', '-t', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA', '--push', '.']
+    args: ['buildx', 'create', '--use', '--name', 'mybuilder']
 
-  # Step 3: Deploy the image to Cloud Run
+  # Step 3: Build and push the Docker image with buildx for the specified platform
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'buildx', 'build',
+      '--builder=mybuilder',
+      '--platform=linux/amd64',
+      '-t', 'gcr.io/$PROJECT_ID/safecitydataservice:$COMMIT_SHA',
+      '--push',
+      '.'
+    ]
+
+  # Step 4: Deploy the image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
